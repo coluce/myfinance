@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MyFinance — finanças pessoais no seu computador</title>
+    <meta
+      name="description"
+      content="MyFinance é um app de controle financeiro pessoal para Linux, distribuído como AppImage. Os dados ficam só no seu computador: sem conta, sem servidor, sem sincronização."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="img/favicon.png" />
+    <style>
+      :root {
+        --bg: #fbfaf6;
+        --surface: #ffffff;
+        --ink: #18332b;
+        --muted: #74847b;
+        --primary: #315c4a;
+        --primary-ink: #ffffff;
+        --border: #dce7e0;
+        --soft: #eef7f2;
+        --radius: 16px;
+        --max: 960px;
+        color-scheme: light;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #17251f;
+          --surface: #20352c;
+          --ink: #f1f7f3;
+          --muted: #b4c5bc;
+          --primary: #a9d0b9;
+          --primary-ink: #17251f;
+          --border: #3a5548;
+          --soft: #1c2e26;
+          color-scheme: dark;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--primary);
+      }
+
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      header.top {
+        border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--bg) 92%, transparent);
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(8px);
+        z-index: 10;
+      }
+
+      header.top .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 64px;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        color: var(--ink);
+      }
+
+      .brand img {
+        border-radius: 10px;
+      }
+
+      nav {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: 0.92rem;
+      }
+
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      nav a:hover {
+        color: var(--ink);
+      }
+
+      .hero {
+        padding: 64px 0 8px;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        margin: 0 0 16px;
+        max-width: 20ch;
+      }
+
+      .lede {
+        font-size: 1.1rem;
+        color: var(--muted);
+        max-width: 60ch;
+        margin: 0 0 28px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: transform 0.12s ease, opacity 0.12s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn.primary {
+        background: var(--primary);
+        color: var(--primary-ink);
+      }
+
+      .btn.ghost {
+        border-color: var(--border);
+        color: var(--ink);
+        background: var(--surface);
+      }
+
+      figure {
+        margin: 0 0 56px;
+      }
+
+      figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: 0 24px 60px -30px rgba(24, 51, 43, 0.45);
+      }
+
+      section {
+        padding: 32px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      h2 {
+        font-size: 1.35rem;
+        letter-spacing: -0.01em;
+        margin: 0 0 8px;
+      }
+
+      section > p {
+        color: var(--muted);
+        max-width: 68ch;
+        margin: 0 0 24px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+      }
+
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      pre {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 18px;
+        overflow-x: auto;
+        font-size: 0.9rem;
+        margin: 0 0 16px;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      ul.notes {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+      }
+
+      ul.notes li {
+        margin-bottom: 6px;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 28px 0 48px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <a class="brand" href="./">
+          <img src="img/icon.png" alt="" width="32" height="32" />
+          MyFinance
+        </a>
+        <nav>
+          <a href="#recursos">Recursos</a>
+          <a href="#instalacao">Instalação</a>
+          <a href="#privacidade">Privacidade</a>
+          <a href="https://github.com/coluce/financeiro.github.io">Repositório</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <section class="hero" style="border-top: 0">
+          <p class="eyebrow">AppImage para Linux</p>
+          <h1>Seu dinheiro no seu computador — e em nenhum outro lugar.</h1>
+          <p class="lede">
+            O MyFinance é um app de controle financeiro pessoal que guarda tudo no próprio disco.
+            Sem cadastro, sem servidor próprio, sem sincronização. Um mês de cada vez, com o que
+            entra, o que sai e o que ainda pode ficar.
+          </p>
+          <div class="actions">
+            <a class="btn primary" href="https://github.com/coluce/financeiro.github.io/releases/latest">
+              Baixar o AppImage
+            </a>
+            <a class="btn ghost" href="https://github.com/coluce/financeiro.github.io">
+              Ver o código-fonte
+            </a>
+          </div>
+          <!-- Substituir img/screenshot.png por uma captura atual do MyFinance. -->
+          <figure>
+            <img
+              src="img/screenshot.png"
+              alt="Tela do MyFinance mostrando o saldo do mês, receitas, despesas e gastos por categoria."
+            />
+          </figure>
+        </section>
+
+        <section id="recursos">
+          <h2>O que ele faz</h2>
+          <p>Cinco telas, nenhuma distração.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Visão geral do mês</h3>
+              <p>Saldo, receitas, despesas, quanto sobra nos limites e a tendência dos últimos meses.</p>
+            </div>
+            <div class="card">
+              <h3>Movimentações</h3>
+              <p>Receitas e despesas com valor, data, descrição e categoria — editáveis a qualquer momento.</p>
+            </div>
+            <div class="card">
+              <h3>Orçamentos por categoria</h3>
+              <p>Defina um limite por categoria e acompanhe o quanto ainda cabe antes de estourar.</p>
+            </div>
+            <div class="card">
+              <h3>Importar e exportar CSV</h3>
+              <p>Traga o histórico de outro lugar e leve seus dados embora quando quiser.</p>
+            </div>
+            <div class="card">
+              <h3>Tema claro e escuro</h3>
+              <p>Acompanha a preferência do sistema; a escolha fica salva entre as sessões.</p>
+            </div>
+            <div class="card">
+              <h3>Funciona offline</h3>
+              <p>Depois de baixado, não precisa de internet para usar. A verificação de atualizações é opcional.</p>
+            </div>
+            <div class="card">
+              <h3>Sobre e atualizações</h3>
+              <p>Versão, links do projeto e uma checagem da última release que só acontece quando você pede.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="instalacao">
+          <h2>Instalação</h2>
+          <p>Um arquivo só. Baixe o AppImage da última versão, dê permissão de execução e abra.</p>
+          <pre><code>chmod +x MyFinance-1.1.0-x86_64.AppImage
+./MyFinance-1.1.0-x86_64.AppImage</code></pre>
+          <ul class="notes">
+            <li>Linux x86_64, com glibc 2.39 ou mais novo.</li>
+            <li>
+              Em algumas distribuições é preciso instalar o FUSE 2 (<code>libfuse2</code> /
+              <code>libfuse2t64</code>). Sem ele, rode
+              <code>./MyFinance-1.1.0-x86_64.AppImage --appimage-extract-and-run</code>.
+            </li>
+            <li>O arquivo tem cerca de 121 MB e não precisa de instalação: é só executar.</li>
+          </ul>
+        </section>
+
+        <section id="privacidade">
+          <h2>Privacidade</h2>
+          <p>Não existe conta, telemetria ou chamada automática para servidor. A única consulta de rede é a verificação de atualizações na aba Sobre, quando você clica; ela consulta a API pública do GitHub e não envia dados financeiros.</p>
+          <ul class="notes">
+            <li>Os dados ficam em <code>~/.config/myfinance/</code>, no armazenamento local do próprio app.</li>
+            <li>
+              Eles <strong>não</strong> são criptografados: quem tiver acesso à sua pasta de usuário consegue lê-los.
+            </li>
+            <li>Para backup completo, use o JSON em Ajustes → Backup; o CSV serve para abrir os dados em planilhas.</li>
+            <li>
+              A documentação de build, arquitetura e decisões está em
+              <a href="https://github.com/coluce/financeiro.github.io/tree/main/doc">doc/</a>.
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>MyFinance — projeto pessoal, de código aberto.</span>
+        <span>
+          <a href="https://github.com/coluce/financeiro.github.io/releases">Versões</a> ·
+          <a href="https://github.com/coluce/financeiro.github.io">GitHub</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>
