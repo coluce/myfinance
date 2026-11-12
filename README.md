@@ -16,7 +16,7 @@ A única consulta de rede é a verificação de atualizações sob demanda.
 
 ## Baixar
 
-A versão pronta está em [Releases](https://github.com/coluce/financeiro.github.io/releases).
+A versão pronta está em [Releases](https://github.com/coluce/myfinance/releases).
 
 ```bash
 chmod +x MyFinance-1.1.0-x86_64.AppImage
